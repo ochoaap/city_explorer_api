@@ -27,16 +27,21 @@ app.listen(PORT, () => {
 });
 
 function locationHandler(request,response){
-  const geoData = require(`data/location.json`);
+  const geoData = require(`../data/location.json`);
   const city = request.query.city;
   const locationData = new Location(city, geoData);
 
   response.send(locationData);
 }
 
-function location (city, geoData) {
-  this.search.query = city;
+function Location (city, geoData) {
+  this.search_query = city;
   this.formatted_query = geoData[0].display_name;
   this.latitude = geoData[0].lat;
   this.longitude = geoData[0].lon;
+}
+
+function Weather (clouds, ) {
+  this.clouds = clouds;
+  this.valid_date = this.valid_date;
 }
