@@ -41,7 +41,17 @@ function Location (city, geoData) {
   this.longitude = geoData[0].lon;
 }
 
-function Weather (clouds, ) {
-  this.clouds = clouds;
-  this.valid_date = this.valid_date;
+function Weather(data) {
+  this.forecast = data.weather.description;
+  let date = Date.parse(data.datetime);
+  this.time = new Date(date).toDateString();
+}
+
+function weatherHdlr (request, response) {
+  const weatherData = require ('../data/weather.json');
+  let weatherDarr = [];
+  weatherData.data.forEach(wData => {
+    weatherDarr.push(new Weather(wData));
+  });
+  response.send(weatherHdlr);
 }
