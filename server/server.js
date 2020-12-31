@@ -5,17 +5,17 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const { response } = require('express');
-
-
-
 const app = express();
-const PORT = process.env.PORT;
+
+
+const PORT = process.env.PORT || 3000;
 app.use(cors());
 
 app.get('/', (request, response) => {
   response.send('Hello World');
 });
 
+//route 
 app.get('/location', locationHandler);
 
 app.use('*', (request, response)=> {
@@ -25,6 +25,8 @@ app.use('*', (request, response)=> {
 app.listen(PORT, () => {
   console.log(`Now listening on port, ${PORT}`);
 });
+
+// function handlers
 
 function locationHandler(request,response){
   const geoData = require(`../data/location.json`);
@@ -41,17 +43,20 @@ function Location (city, geoData) {
   this.longitude = geoData[0].lon;
 }
 
-function Weather(data) {
-  this.forecast = data.weather.description;
-  let date = Date.parse(data.datetime);
-  this.time = new Date(date).toDateString();
-}
+app.get('/weather', (request, response) =>{
+  const weather = require('./data/weather');
+  const weatherArr = [];
+  weather.data.forEach( weather => {
+    weatherArr.push(new Weather(weather));
+  })
 
-function weatherHdlr (request, response) {
-  const weatherData = require ('../data/weather.json');
-  let weatherDarr = [];
-  weatherData.data.forEach(wData => {
-    weatherDarr.push(new Weather(wData));
-  });
-  response.send(weatherHdlr);
-}
+});
+
+
+function Weather(weather) {
+this.forecast = weather.weather.descriptiion;
+this.time = weather.valid_date;  
+
+};
+
+
