@@ -17,16 +17,15 @@ app.get('/', (request, response) => {
 
 //route 
 app.get('/location', locationHandler);
-
+app.get('/weather', weatherHandler);
 app.use('*', (request, response)=> {
   response.send('404, Sorry!');
 });
 
-app.listen(PORT, () => {
-  console.log(`Now listening on port, ${PORT}`);
-});
+
 
 // function handlers
+
 
 function locationHandler(request,response){
   const geoData = require(`../data/location.json`);
@@ -43,20 +42,28 @@ function Location (city, geoData) {
   this.longitude = geoData[0].lon;
 }
 
-app.get('/weather', (request, response) =>{
-  const weather = require('./data/weather');
+function weatherHandler (request, response) {
+  const weather = require('../data/weather.json');
+  console.log('weather', weather);
   const weatherArr = [];
-  weather.data.forEach( weather => {
-    weatherArr.push(new Weather(weather));
-  })
-
-});
+  weather.data.forEach( weatherInfo => {
+    console.log('weatherInfo', weatherInfo);
+    weatherArr.push(new Weather(weatherInfo));
+  });
+  response.send(weatherArr);
+};
 
 
 function Weather(weather) {
 this.forecast = weather.weather.descriptiion;
 this.time = weather.valid_date;  
-
 };
 
+
+app.use('*', (request, respond)=>{
+  respond.status(500).send("Sorry, something went wrong.");
+});
+app.listen(PORT, ()=>{
+  console.log(`Now listening on PORT,${PORT}`);
+});
 
