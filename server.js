@@ -18,9 +18,6 @@ app.get('/', (request, response) => {
 //route 
 app.get('/location', locationHandler);
 app.get('/weather', weatherHandler);
-app.use('*', (request, response)=> {
-  response.send('404, Sorry!');
-});
 
 
 
@@ -28,7 +25,7 @@ app.use('*', (request, response)=> {
 
 
 function locationHandler(request,response){
-  const geoData = require(`../data/location.json`);
+  const geoData = require(`./data/location.json`);
   const city = request.query.city;
   const locationData = new Location(city, geoData);
 
@@ -43,7 +40,7 @@ function Location (city, geoData) {
 }
 
 function weatherHandler (request, response) {
-  const weather = require('../data/weather.json');
+  const weather = require('./data/weather.json');
   console.log('weather', weather);
   const weatherArr = [];
   weather.data.forEach( weatherInfo => {
