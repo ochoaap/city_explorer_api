@@ -52,7 +52,7 @@ function weatherHandler (request, response) {
 
 
 function Weather(weather) {
-this.forecast = weather.weather.descriptiion;
+this.forecast = weather.weather.description;
 this.time = weather.valid_date;  
 };
 
