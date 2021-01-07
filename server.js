@@ -4,8 +4,9 @@ require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
-const { response } = require('express');
+const { response, request } = require('express');
 const app = express();
+const superagent = require('superagent');
 
 
 const PORT = process.env.PORT || 3000;
@@ -16,15 +17,33 @@ app.get('/', (request, response) => {
 });
 
 //route 
-app.get('/location', locationHandler);
-app.get('/weather', weatherHandler);
+app.get('/location', (request, response) => {
+  let city = request.query.city;
+  let key = process.env.GEOCODE_API_KEY;
+  const url = `https://us1.locationiq.com/v1/search.php?key=${key}&q=${city}&format=json`;
+  console.log(url);
 
+  superagent.get(url)
+    .then(data => {
+      console.log(data.body);
+      const locationData = data.body;
+      const locationHandler = new Location(city, locationData);
+
+      response.status(200).send(locationHandler)
+    });
+
+});
+
+
+
+app.get('/weather', weatherHandler);
+app.get('/location', locationHandler);
 
 
 // function handlers
 
 
-function locationHandler(request,response){
+function locationHandler(request, response) {
   const geoData = require(`./data/location.json`);
   const city = request.query.city;
   const locationData = new Location(city, geoData);
@@ -32,35 +51,43 @@ function locationHandler(request,response){
   response.send(locationData);
 }
 
-function Location (city, geoData) {
+function Location(city, geoData) {
   this.search_query = city;
   this.formatted_query = geoData[0].display_name;
   this.latitude = geoData[0].lat;
   this.longitude = geoData[0].lon;
 }
 
-function weatherHandler (request, response) {
-  const weather = require('./data/weather.json');
-  console.log('weather', weather);
-  const weatherArr = [];
-  weather.data.forEach( weatherInfo => {
-    console.log('weatherInfo', weatherInfo);
-    weatherArr.push(new Weather(weatherInfo));
-  });
-  response.send(weatherArr);
-};
+function weatherHandler(request, response) {
+
+  const url = `https://api.weatherbit.io/v2.0/forecast/daily?lat=${request.query.latitude}&lon=${request.query.longitude}`;
+
+  superagent.get(url)
+  set('user-key', process.env.WEATHER_API_KEY)
+    .then(data => {
+      const weatherData = [];
+      data.body.weatherData.forEach(weather => {
+        weatherData.push(new Weather(weather));
+      })
+      response.status(200).send(weatherData);
+
+
+    });
+
+
+}
 
 
 function Weather(weather) {
-this.forecast = weather.weather.descriptiion;
-this.time = weather.valid_date;  
+  this.forecast = weather.weather.description;
+  this.time = weather.valid_date;
 };
 
 
-app.use('*', (request, respond)=>{
+app.use('*', (request, respond) => {
   respond.status(500).send("Sorry, something went wrong.");
 });
-app.listen(PORT, ()=>{
+app.listen(PORT, () => {
   console.log(`Now listening on PORT,${PORT}`);
 });
 
