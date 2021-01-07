@@ -81,6 +81,8 @@ function weatherHandler(request, response) {
 function Weather(weather) {
   this.forecast = weather.weather.description;
   this.time = weather.valid_date;
+this.forecast = weather.weather.description;
+this.time = weather.valid_date;  
 };
 
 
