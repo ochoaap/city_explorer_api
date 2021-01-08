@@ -59,19 +59,25 @@ function Location(city, geoData) {
 }
 
 function weatherHandler(request, response) {
+  let key = process.env.WEATHER_API_KEY;
+  let lon = request.query.longitude
+  let lat = request.query.latitude
+  const url = `https://api.weatherbit.io/v2.0/forecast/daily?lat=${lat}&lon=${lon}&key=${key}`;
 
-  const url = `https://api.weatherbit.io/v2.0/forecast/daily?lat=${request.query.latitude}&lon=${request.query.longitude}`;
 
   superagent.get(url)
-  set('user-key', process.env.WEATHER_API_KEY)
     .then(data => {
-      const weatherData = [];
-      data.body.weatherData.forEach(weather => {
-        weatherData.push(new Weather(weather));
-      })
-      response.status(200).send(weatherData);
+      console.log(data.body);
+      let weatherArr = data.body.data.map(weatherData => {
+        return new Weather(weatherData)
+      });
+      
 
+      response.status(200).send(weatherArr);
 
+    })
+    .catch(error => {
+      console.log(error);
     });
 
 
@@ -79,7 +85,7 @@ function weatherHandler(request, response) {
 
 
 function Weather(weather) {
-  this.forecast = weather.weather.description;
+  this.forecast = weather.description;
   this.time = weather.valid_date;
 };
 
