@@ -69,6 +69,7 @@ function weatherHandler(request, response) {
     .then(data => {
       console.log(data.body);
       let weatherArr = data.body.data.map(weatherData => {
+        console.log(weatherData.weather)
         return new Weather(weatherData)
       });
 
@@ -83,7 +84,7 @@ function weatherHandler(request, response) {
 
 
 function Weather(weather) {
-  this.forecast = weather.description;
+  this.forecast = weather.weather.description;
   this.time = weather.valid_date;
 };
 
