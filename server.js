@@ -71,7 +71,7 @@ function weatherHandler(request, response) {
       let weatherArr = data.body.data.map(weatherData => {
         return new Weather(weatherData)
       });
-      
+
 
       response.status(200).send(weatherArr);
 
@@ -79,8 +79,6 @@ function weatherHandler(request, response) {
     .catch(error => {
       console.log(error);
     });
-
-
 }
 
 
