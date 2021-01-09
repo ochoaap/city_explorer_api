@@ -1,15 +1,31 @@
 'use strict';
 
 require('dotenv').config();
-
 const express = require('express');
 const cors = require('cors');
 const { response, request } = require('express');
 const app = express();
 const superagent = require('superagent');
-
-
+const pg = require('pg');
+const client = new pg.Client(process.env.DATABASE_URL);
 const PORT = process.env.PORT || 3000;
+
+client.on('error', err =>{
+  throw err;
+});
+
+client.connect()
+  .then(()=>{
+    app.listen(PORT, () =>{
+      console.log(`Now Listening to PORT, ${PORT}`)
+      console.log(`Connected to database ${client.connectionParameters.database}`);
+    })
+  });
+
+
+
+
+
 app.use(cors());
 
 app.get('/', (request, response) => {
