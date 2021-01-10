@@ -10,13 +10,13 @@ const pg = require('pg');
 const client = new pg.Client(process.env.DATABASE_URL);
 const PORT = process.env.PORT || 3000;
 
-client.on('error', err =>{
+client.on('error', err => {
   throw err;
 });
 
 client.connect()
-  .then(()=>{
-    app.listen(PORT, () =>{
+  .then(() => {
+    app.listen(PORT, () => {
       console.log(`Now Listening to PORT, ${PORT}`)
       console.log(`Connected to database ${client.connectionParameters.database}`);
     })
@@ -26,37 +26,62 @@ client.connect()
 
 
 
+
 app.use(cors());
+
 
 app.get('/', (request, response) => {
   response.send('Hello World');
 });
 
-//route 
 app.get('/location', (request, response) => {
   let city = request.query.city;
   let key = process.env.GEOCODE_API_KEY;
   const url = `https://us1.locationiq.com/v1/search.php?key=${key}&q=${city}&format=json`;
   console.log(url);
 
-  superagent.get(url)
+  client.query(`SELECT * FROM location WHERE search_query= $1`, [city])
     .then(data => {
-      console.log(data.body);
-      const locationData = data.body;
-      const locationHandler = new Location(city, locationData);
+      if (data.rowCount) {
+        response.status(200).send(data.rows[0]);
+      }
+      else {
+        superagent.get(url)
+          .then(data => {
+            console.log(data.body);
+            const locationData = data.body;
+            const locationHandler = new Location(city, locationData);
 
-      response.status(200).send(locationHandler)
-    });
+            let SQL = 'INSERT INTO location (formatted_query, search_query, latitude, longitude) VALUES ($1, $2, $3, $4)';
+            let safeValues = [locationHandler.formatted_query, locationHandler.search_query, locationHandler.latitude, locationHandler.longitude];
+
+            client.query(SQL, safeValues)
+              .then(() => {
+                response.status(200).json(locationHandler);
+              })
+              .catch(error => {
+                console.log(error);
+              });
+
+          });
+      }
+
+    })
+
+
 
 });
 
-
-
 app.get('/weather', weatherHandler);
-app.get('/location', locationHandler);
+// app.get('/location', locationHandler);
 
 
-// function handlers
+app.get(`/add`, (request, response) => {
+  console.log(request.query);
+  let location = request.query.location;
+  let weather = request.query.weather;
+
+});
 
 
 function locationHandler(request, response) {
@@ -81,9 +106,10 @@ function weatherHandler(request, response) {
   const url = `https://api.weatherbit.io/v2.0/forecast/daily?lat=${lat}&lon=${lon}&key=${key}`;
 
 
+
+
   superagent.get(url)
     .then(data => {
-      console.log(data.body);
       let weatherArr = data.body.data.map(weatherData => {
         console.log(weatherData.weather)
         return new Weather(weatherData)
@@ -107,8 +133,5 @@ function Weather(weather) {
 
 app.use('*', (request, respond) => {
   respond.status(500).send("Sorry, something went wrong.");
-});
-app.listen(PORT, () => {
-  console.log(`Now listening on PORT,${PORT}`);
 });
 
