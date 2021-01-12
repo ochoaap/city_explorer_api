@@ -20,7 +20,8 @@ client.connect()
       console.log(`Now Listening to PORT, ${PORT}`)
       console.log(`Connected to database ${client.connectionParameters.database}`);
     })
-  });
+  })
+  .catch(err => console.log(err));
 
 
 
