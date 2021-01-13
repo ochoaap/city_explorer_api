@@ -32,34 +32,34 @@ Second commit was January 7th 1130Pm
 Final submission was January 8th at 320pm
 
 For features 
-Number and name of feature: _1 refactor weather_______________________________
+Number and name of feature: _1 database_______________________________
 
-Estimate of time needed to complete: __10 minutes___
+Estimate of time needed to complete: __45 minutes___
 
-Start time: __12pm___
+Start time: __1700___
 
-Finish time: _1330____
+Finish time: _1830____
 
 Actual time needed to complete: _1hr 30 minutes____
 
 
-Number and name of feature: __2______locations________________________
+Number and name of feature: __2______server________________________
 
-Estimate of time needed to complete: _1hr____
+Estimate of time needed to complete: _1.5hr____
 
-Start time: _1220____
+Start time: _10am____
 
 Finish time: _1300____
 
-Actual time needed to complete: __40 minutes___
+Actual time needed to complete: __3 hours___
 
 
-Number and name of feature: __3 ___weather___________________________
+Number and name of feature: __3 ___upload to heroku__________________________
 
-Estimate of time needed to complete: _1hr____
+Estimate of time needed to complete: _15minutes____
 
-Start time: __1335___
+Start time: __1800 Saturday__
 
-Finish time: __2300___
+Finish time: __2130___
 
-Actual time needed to complete: __a couple hours, it was broken between this and after class___
+Actual time needed to complete: _So this is very broken up. I kept running into an error, I Started at 1800 on Saturday and it did not get finished until 2130 Last night due to this error. I had Ray and John come help because of the error. _
