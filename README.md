@@ -24,3 +24,42 @@ Since I did not this in real time the only time stamp I have is when it was live
 ## Credits and Collaborations
 <!-- Give credit (and a link) to other people or resources that helped you build this application. -->
 --> A lot of credit goes to Dawit Ayana, he helped me a lot throughout this process. I also followed along with the Frontrow video 
+
+
+For Lab 7 time stamps/Date Stamps ** estimated
+Original was January 7th at 12pm
+Second commit was January 7th 1130Pm 
+Final submission was January 8th at 320pm
+
+For features 
+Number and name of feature: _1 refactor weather_______________________________
+
+Estimate of time needed to complete: __10 minutes___
+
+Start time: __12pm___
+
+Finish time: _1330____
+
+Actual time needed to complete: _1hr 30 minutes____
+
+
+Number and name of feature: __2______locations________________________
+
+Estimate of time needed to complete: _1hr____
+
+Start time: _1220____
+
+Finish time: _1300____
+
+Actual time needed to complete: __40 minutes___
+
+
+Number and name of feature: __3 ___weather___________________________
+
+Estimate of time needed to complete: _1hr____
+
+Start time: __1335___
+
+Finish time: __2300___
+
+Actual time needed to complete: __a couple hours, it was broken between this and after class___
